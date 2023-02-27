@@ -39,29 +39,49 @@ async function main() {
    const currentTimestampInSeconds = Math.round(Date.now() / 1000);
    console.log(currentTimestampInSeconds);
 
-   const prob1 = await opt_price.optionPrice(true , 1500 , currentTimestampInSeconds+1800);
-   console.log(prob1);
+   const nowPrice = await opt_price.getConversionRate(1);
+   console.log("now Price:" , nowPrice);
 
-   const prob2 = await opt_price.optionPrice(true , 1600 , currentTimestampInSeconds+1800);
-   console.log(prob2);
+   const strikeprice1 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 1);
+   console.log("strikeprice1: " , strikeprice1);
 
-   const prob3 = await opt_price.optionPrice(true , 1610 , currentTimestampInSeconds+1800);
-   console.log(prob3);
+   const strikeprice2 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 10);
+   console.log("strikeprice2: " , strikeprice2);
 
-   const prob4 = await opt_price.optionPrice(true , 1650 , currentTimestampInSeconds+1800);
-   console.log(prob4);
+   const strikeprice3 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 100);
+   console.log("strikeprice3: " , strikeprice3);
 
-   const prob5 = await opt_price.optionPrice(false , 1700 , currentTimestampInSeconds+1800);
-   console.log(prob5);
+   const strikeprice4 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 250);
+   console.log("strikeprice4: " , strikeprice4);
 
-   const prob6 = await opt_price.optionPrice(false , 1600 , currentTimestampInSeconds+1800);
-   console.log(prob6);
+   const strikeprice5 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 500);
+   console.log("strikeprice5: " , strikeprice5);
 
-   const prob7 = await opt_price.optionPrice(false , 1590 , currentTimestampInSeconds+1800);
-   console.log(prob7);
+   const strikeprice6 = await opt_price.optionStrikePriceWithCertainProb(true , currentTimestampInSeconds+86400 , 300);
+   console.log("strikeprice5: " , strikeprice6);
+  //  const prob1 = await opt_price.optionPrice(true , 1500 , currentTimestampInSeconds+1800);
+  //  console.log(prob1);
 
-   const prob8 = await opt_price.optionPrice(false , 1580 , currentTimestampInSeconds+1800);
-   console.log(prob8);
+  //  const prob2 = await opt_price.optionPrice(true , 1600 , currentTimestampInSeconds+1800);
+  //  console.log(prob2);
+
+  //  const prob3 = await opt_price.optionPrice(true , 1610 , currentTimestampInSeconds+1800);
+  //  console.log(prob3);
+
+  //  const prob4 = await opt_price.optionPrice(true , 1650 , currentTimestampInSeconds+1800);
+  //  console.log(prob4);
+
+  //  const prob5 = await opt_price.optionPrice(false , 1700 , currentTimestampInSeconds+1800);
+  //  console.log(prob5);
+
+  //  const prob6 = await opt_price.optionPrice(false , 1600 , currentTimestampInSeconds+1800);
+  //  console.log(prob6);
+
+  //  const prob7 = await opt_price.optionPrice(false , 1590 , currentTimestampInSeconds+1800);
+  //  console.log(prob7);
+
+  //  const prob8 = await opt_price.optionPrice(false , 1580 , currentTimestampInSeconds+1800);
+  //  console.log(prob8);
 }
 
 

@@ -9,6 +9,7 @@ contract OptionPrice {
 
 
     uint8[100] public cdf_data = [50, 52, 53, 54, 55, 56, 58, 59, 60, 61, 62, 63, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 80, 81, 82, 83, 84, 84, 85, 86, 86, 87, 88, 88, 89, 90, 90, 91, 91, 92, 92, 93, 93, 93, 94, 94, 95, 95, 95, 96, 96, 96, 96, 97, 97, 97, 97, 98, 98, 98, 98, 98, 98, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]; 
+    mapping(uint => uint) prob_to_zscore;
 
 
     function getPrice() public view returns (uint256) {
@@ -98,4 +99,43 @@ contract OptionPrice {
 
         return prob;
     }
+
+    function optionStrikePriceWithCertainProb(bool is_call , uint expire_timestamp , uint exercise_prob) public view returns(uint256){
+        // exercise_prob multiplies 1000 , so 1 represents 0.001 , 500 represents 0.5 , only 5 options avaliable
+        // norm.ppf([0.001, 0.01 , 0.1 , 0.25 , 0.5])
+        // array([-3.09023231, -2.32634787, -1.28155157, -0.67448975,  0.        ])
+        bool prob_flag = false;    // prob must in prob list
+        uint zscore;
+        uint16[5] memory prob_list = [1,10,100,250,500];
+        uint16[5] memory zscore_list = [309,232,128,67,0];
+
+        for (uint i = 0; i < 5; i++) {
+            if (exercise_prob == prob_list[i]) {
+                prob_flag = true;
+                zscore = zscore_list[i];
+            }
+        }
+
+        require(prob_flag , "exercise prob not supported");
+
+        uint now_price = getConversionRate(1);
+
+        uint second_volatility_mul_thousand = now_price * 1000 / sqrt(86400*365);
+        uint seconds_until_expire = expire_timestamp - block.timestamp;
+        uint volatility_until_expire = sqrt(seconds_until_expire) * second_volatility_mul_thousand;
+
+        uint diff_price = zscore * volatility_until_expire / 100 / 1000;   //zcore divide 100 , volatlity divide 1000
+
+        if (is_call) {
+            return now_price+diff_price;
+        }
+        else {
+            return now_price-diff_price;
+        }
+
+
+
+    }
+
+
 }
